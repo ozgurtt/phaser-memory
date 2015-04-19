@@ -1,8 +1,5 @@
 'use strict';
 
-var BOARD_WIDTH = 16;
-var BOARD_HEIGHT = 16;
-var MINE_COUNT = 80;
 var MINE_COUNT_STYLE = {
   font: '18px Arial', align: 'center'
 };
@@ -22,10 +19,22 @@ var MINE_COUNT_COLORS = [
 
 module.exports = function () {
   var vm = this;
-  var game = new Phaser.Game(970, 480, Phaser.AUTO, 'game');
+  vm.options = {
+    width: 9,
+    height: 9,
+    mineCount: 10
+  };
+  vm.tileWidth = 24;
+  vm.tileHeight = 24;
+  vm.padding = 10;
+
+  vm.resetGame = function() {
+    vm.game.destroy();
+    vm.startGame();
+  };
 
   function Tile() {
-    Phaser.Sprite.call(this, game, 0, 0, 'tile');
+    Phaser.Sprite.call(this, vm.game, 0, 0, 'tile');
 
     this.mine = false; // is this tile a mine?
     this.mineCount = 0; // number of mines surrounding this tile
@@ -140,7 +149,7 @@ module.exports = function () {
 
   MainState.prototype = {
     preload: function () {
-      this.load.spritesheet('tile', 'img/minesweeper-tiles.png', 24, 24);
+      this.load.spritesheet('tile', 'img/minesweeper-tiles.png', vm.tileWidth, vm.tileHeight);
     },
 
     create: function () {
@@ -148,10 +157,13 @@ module.exports = function () {
 
       this.createTiles();
       this.clearedTiles = 0;
-      this.toWin = (BOARD_WIDTH * BOARD_HEIGHT) - MINE_COUNT;
-      this.flagKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
-      this.checkKey = game.input.keyboard.addKey(Phaser.Keyboard.CONTROL);
+      this.toWin = (vm.options.width * vm.options.height) - vm.options.mineCount;
+      this.flagKey = vm.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
+      this.checkKey = vm.game.input.keyboard.addKey(Phaser.Keyboard.CONTROL);
+
       this.started = false; // Place mines on first click to avoid death on first move!
+      this.lost = false;
+      this.won = false;
     },
 
     clickTile: function(tile) {
@@ -200,14 +212,14 @@ module.exports = function () {
     createTiles: function() {
       var that = this;
 
-      this.tiles = _.map(_.range(0, BOARD_WIDTH), function(x) {
-        return _.map(_.range(0, BOARD_HEIGHT ), function(y) {
+      this.tiles = _.map(_.range(0, vm.options.width), function(x) {
+        return _.map(_.range(0, vm.options.height ), function(y) {
           var tile = new Tile();
-          tile.x = x * 24;
-          tile.y = y * 24;
+          tile.x = x * vm.tileWidth + vm.padding / 2;
+          tile.y = y * vm.tileHeight + vm.padding / 2;
           tile.events.onInputDown.add(that.clickTile, that);
 
-          game.add.existing(tile);
+          vm.game.add.existing(tile);
           return tile;
         });
       });
@@ -231,10 +243,10 @@ module.exports = function () {
     placeMines: function(ignoreTile) {
       var that = this;
 
-      _.times(MINE_COUNT, function() {
+      _.times(vm.options.mineCount, function() {
         do {
-          var randomX = _.random(0, BOARD_WIDTH - 1);
-          var randomY = _.random(0, BOARD_HEIGHT - 1);
+          var randomX = _.random(0, vm.options.width - 1);
+          var randomY = _.random(0, vm.options.height - 1);
           var tile = that.tiles[randomX][randomY];
         } while (tile === ignoreTile || tile.mine);
         tile.makeMine();
@@ -252,11 +264,21 @@ module.exports = function () {
     },
 
     showWin: function() {
-      var text = game.add.text(game.world.centerX, game.world.centerY, 'YOUR WINNER', HEADER_STYLE);
+      var text = vm.game.add.text(vm.game.world.centerX, vm.game.world.centerY, 'YOUR WINNER', HEADER_STYLE);
       text.anchor.set(0.5);
     }
   };
 
-  game.state.add('MainState', MainState);
-  game.state.start('MainState');
+  vm.startGame = function() {
+    vm.game = new Phaser.Game(
+      vm.options.width * vm.tileWidth + 10,
+      vm.options.height * vm.tileHeight + 10,
+      Phaser.AUTO,
+      'game'
+    );
+    vm.game.state.add('MainState', MainState);
+    vm.game.state.start('MainState');
+  };
+
+  vm.startGame();
 };

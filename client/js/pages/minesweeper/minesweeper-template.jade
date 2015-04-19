@@ -1,3 +1,13 @@
 .header
 .container
   #game
+  .minesweeper-options-container
+    form.css-form(name='vm.optionsForm')
+      label(for='width') Width
+      input(name='width', type='number', min=9, ng-model='vm.options.width')
+      label(for='width') Height
+      input(name='height', type='number', min=9, ng-model='vm.options.height')
+      label(for='width') Mines
+      input(name='mineCount', type='number', min=10, ng-model='vm.options.mineCount')
+
+      button(ng-click='vm.resetGame()') Reset Game
