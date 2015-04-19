@@ -1,8 +1,8 @@
 'use strict';
 
-var BOARD_WIDTH = 9;
-var BOARD_HEIGHT = 9;
-var MINE_COUNT = 10;
+var BOARD_WIDTH = 16;
+var BOARD_HEIGHT = 16;
+var MINE_COUNT = 80;
 var MINE_COUNT_STYLE = {
   font: '18px Arial', align: 'center'
 };
@@ -236,7 +236,7 @@ module.exports = function () {
           var randomX = _.random(0, BOARD_WIDTH - 1);
           var randomY = _.random(0, BOARD_HEIGHT - 1);
           var tile = that.tiles[randomX][randomY];
-        } while (tile === ignoreTile);
+        } while (tile === ignoreTile || tile.mine);
         tile.makeMine();
       });
     },
