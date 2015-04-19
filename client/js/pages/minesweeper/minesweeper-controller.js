@@ -17,7 +17,7 @@ var MINE_COUNT_COLORS = [
   '#7e0001'
 ];
 
-module.exports = function () {
+module.exports = ['$scope', function ($scope) {
   var vm = this;
   vm.options = {
     width: 9,
@@ -27,10 +27,23 @@ module.exports = function () {
   vm.tileWidth = 24;
   vm.tileHeight = 24;
   vm.padding = 10;
+  vm.canvasStyle = {
+    width: (vm.options.width * vm.tileWidth + 10) + 'px',
+    height: (vm.options.height * vm.tileHeight + 10) + 'px'
+  };
+
+  vm.maxMines = function() {
+    return Math.floor(vm.options.width * vm.options.height * 0.8) || 10;
+  };
 
   vm.resetGame = function() {
-    vm.game.destroy();
-    vm.startGame();
+    if (vm.optionsForm.$invalid) return;
+    vm.canvasStyle = {
+      width: (vm.options.width * vm.tileWidth + 10) + 'px',
+      height: (vm.options.height * vm.tileHeight + 10) + 'px'
+    };
+    vm.game.scale.refresh();
+    vm.game.state.restart();
   };
 
   function Tile() {
@@ -145,19 +158,36 @@ module.exports = function () {
     return this.clearFill(true);
   };
 
-  function MainState() {}
+  var Minesweeper = {};
 
-  MainState.prototype = {
+  Minesweeper.Boot = function() {};
+
+  Minesweeper.Boot.prototype = {
+    init: function() {
+      this.game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
+    },
+
+    create: function() {
+      console.log('hi');
+      vm.game.state.start('Game');
+    }
+  };
+
+  Minesweeper.Game = function() {};
+
+  Minesweeper.Game.prototype = {
     preload: function () {
       this.load.spritesheet('tile', 'img/minesweeper-tiles.png', vm.tileWidth, vm.tileHeight);
     },
 
     create: function () {
-      this.game.stage.backgroundColor = '#DDDDDD';
+      this.width = vm.options.width;
+      this.height = vm.options.height;
+      this.mineCount = vm.options.mineCount;
 
       this.createTiles();
       this.clearedTiles = 0;
-      this.toWin = (vm.options.width * vm.options.height) - vm.options.mineCount;
+      this.toWin = (this.width * this.height) - this.mineCount;
       this.flagKey = vm.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
       this.checkKey = vm.game.input.keyboard.addKey(Phaser.Keyboard.CONTROL);
 
@@ -204,7 +234,6 @@ module.exports = function () {
       if (this.won) return;
 
       if (this.clearedTiles === this.toWin) {
-        this.won = true;
         this.showWin();
       }
     },
@@ -212,8 +241,8 @@ module.exports = function () {
     createTiles: function() {
       var that = this;
 
-      this.tiles = _.map(_.range(0, vm.options.width), function(x) {
-        return _.map(_.range(0, vm.options.height ), function(y) {
+      this.tiles = _.map(_.range(0, this.width), function(x) {
+        return _.map(_.range(0, that.height ), function(y) {
           var tile = new Tile();
           tile.x = x * vm.tileWidth + vm.padding / 2;
           tile.y = y * vm.tileHeight + vm.padding / 2;
@@ -243,10 +272,10 @@ module.exports = function () {
     placeMines: function(ignoreTile) {
       var that = this;
 
-      _.times(vm.options.mineCount, function() {
+      _.times(this.mineCount, function() {
         do {
-          var randomX = _.random(0, vm.options.width - 1);
-          var randomY = _.random(0, vm.options.height - 1);
+          var randomX = _.random(0, that.width - 1);
+          var randomY = _.random(0, that.height - 1);
           var tile = that.tiles[randomX][randomY];
         } while (tile === ignoreTile || tile.mine);
         tile.makeMine();
@@ -264,6 +293,7 @@ module.exports = function () {
     },
 
     showWin: function() {
+      this.won = true;
       var text = vm.game.add.text(vm.game.world.centerX, vm.game.world.centerY, 'YOUR WINNER', HEADER_STYLE);
       text.anchor.set(0.5);
     }
@@ -271,14 +301,17 @@ module.exports = function () {
 
   vm.startGame = function() {
     vm.game = new Phaser.Game(
-      vm.options.width * vm.tileWidth + 10,
-      vm.options.height * vm.tileHeight + 10,
+      1,
+      1,
       Phaser.AUTO,
-      'game'
+      'minesweeper',
+      null,
+      true
     );
-    vm.game.state.add('MainState', MainState);
-    vm.game.state.start('MainState');
+    vm.game.state.add('Boot', Minesweeper.Boot);
+    vm.game.state.add('Game', Minesweeper.Game);
+    vm.game.state.start('Boot');
   };
 
   vm.startGame();
-};
+}];

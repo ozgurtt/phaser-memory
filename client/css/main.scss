@@ -9,7 +9,7 @@
 }
 
 .container {
-  width: 1000px;
+  max-width: 1000px;
   padding: 20px;
   margin: 0 auto;
 }
@@ -24,7 +24,15 @@
 
 .header {
   height: 100px;
-  background-color: $non-photo-blue;
+  background-color: $secondary;
+  text-align: center;
+  box-shadow: $element-shadow;
+}
+
+.header-title {
+  padding: 20px;
+  font-size: 40px;
+  color: $primary;
 }
 
 @media screen and (max-width: 600px) {
