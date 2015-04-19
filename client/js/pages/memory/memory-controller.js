@@ -5,11 +5,6 @@ var CARD_REVERT_SPEED = 800;
 
 module.exports = ['ResourceService', function (ResourceService) {
   var vm = this;
-
-  ResourceService.index().then(function(data) {
-    vm.resources = data;
-  });
-
   var game = new Phaser.Game(900, 480, Phaser.AUTO, 'game');
 
   function Card(frame) {

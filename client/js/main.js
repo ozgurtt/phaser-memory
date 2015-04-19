@@ -13,6 +13,7 @@ var app = angular.module('SampleApp', ['ngRoute', 'ngAnimate', 'ngMessages']);
 // pages
 app.controller('HomeController', require('./pages/home/home-controller.js'));
 app.controller('MemoryController', require('./pages/memory/memory-controller.js'));
+app.controller('MinesweeperController', require('./pages/minesweeper/minesweeper-controller.js'));
 
 // components (controllers exposed for testing)
 app.directive('component', require('./components/component/component'));
@@ -39,6 +40,11 @@ app.config([
       .when('/memory', {
         template: require('./pages/memory/memory-template.jade'),
         controller: 'MemoryController',
+        controllerAs: 'vm'
+      })
+      .when('/minesweeper', {
+        template: require('./pages/minesweeper/minesweeper-template.jade'),
+        controller: 'MinesweeperController',
         controllerAs: 'vm'
       })
       .otherwise({
