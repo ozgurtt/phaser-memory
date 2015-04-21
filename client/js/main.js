@@ -14,6 +14,7 @@ var app = angular.module('SampleApp', ['ngRoute', 'ngAnimate', 'ngMessages']);
 app.controller('HomeController', require('./pages/home/home-controller.js'));
 app.controller('MemoryController', require('./pages/memory/memory-controller.js'));
 app.controller('MinesweeperController', require('./pages/minesweeper/minesweeper-controller.js'));
+app.controller('TetrisController', require('./pages/tetris/tetris-controller.js'));
 
 // components (controllers exposed for testing)
 app.directive('component', require('./components/component/component'));
@@ -45,6 +46,11 @@ app.config([
       .when('/minesweeper', {
         template: require('./pages/minesweeper/minesweeper-template.jade'),
         controller: 'MinesweeperController',
+        controllerAs: 'vm'
+      })
+      .when('/tetris', {
+        template: require('./pages/tetris/tetris-template.jade'),
+        controller: 'TetrisController',
         controllerAs: 'vm'
       })
       .otherwise({

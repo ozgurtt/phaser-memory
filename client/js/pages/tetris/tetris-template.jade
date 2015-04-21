@@ -1,0 +1,26 @@
+.header
+  .header-title DONGTRIS
+.container
+  .tetris-instructions
+    | It's Tetris, you don't need instructions.
+  #tetris(ng-style='vm.canvasStyle')
+  //.tetris-options-container
+  //  form.css-form(name='vm.optionsForm', novalidate)
+  //    label(for='width') Width
+  //    input(name='width', type='number', min=9, max=40, ng-model='vm.options.width', ng-model-options='{debounce: 300}')
+  //    label(for='width') Height
+  //    input(name='height', type='number', min=9, max=40, ng-model='vm.options.height', ng-model-options='{debounce: 300}')
+  //    label(for='width') Mines
+  //    input(name='mineCount', type='number', min=10, max='{{ vm.maxMines() }}', ng-model='vm.options.mineCount', ng-model-options='{debounce: 300}')
+  //
+  //    button(ng-click='vm.resetGame()') Reset Game
+  //
+  //    div(ng-messages='vm.optionsForm.width.$error')
+  //      .error(ng-message='min') Minimum width is 9.
+  //      .error(ng-message='max') Maximum width is 40.
+  //    div(ng-messages='vm.optionsForm.height.$error')
+  //      .error(ng-message='min') Minimum height is 9.
+  //      .error(ng-message='max') Maximum height is 40.
+  //    div(ng-messages='vm.optionsForm.mineCount.$error')
+  //      .error(ng-message='min') Minimum number of mines is 10.
+  //      .error(ng-message='max') Can't have more than {{ vm.maxMines() }} mines with those settings.
