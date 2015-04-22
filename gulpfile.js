@@ -97,7 +97,7 @@ gulp.task('watch', function () {
   });
 
   gulp.watch('client/**/*.scss', ['sass']);
-  gulp.watch(['client/**/*.html', 'client/**/*.css', 'client/**/*.svg', 'client/**/*.jpg', 'client/vid/*.*'], ['copy-static-files']);
+  gulp.watch(['client/**/*.html', 'client/**/*.css', 'client/**/*.svg', 'client/**/*.jpg', 'client/vid/*.*', 'client/**/*.json', 'client/**/*.fnt'], ['copy-static-files']);
   gulp.watch('client/**/*.png', ['process-png']);
   gulp.watch('server/**/*.js', ['mocha']);
 
@@ -135,7 +135,7 @@ gulp.task('copy-modules', function() {
 });
 
 gulp.task('copy-static-files', function() {
-  return gulp.src(['./client/**/*.html', './client/**/*.css', 'client/**/*.svg', 'client/**/*.jpg', 'client/**/*.mp4'])
+  return gulp.src(['client/**/*.html', 'client/**/*.css', 'client/**/*.svg', 'client/**/*.jpg', 'client/**/*.mp4', 'client/**/*.json', 'client/**/*.fnt'])
     .pipe(gulp.dest('dist/'))
     .pipe(reload({stream: true}));
 });

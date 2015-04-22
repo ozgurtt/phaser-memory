@@ -28,8 +28,8 @@ Block.prototype.moveAbs = function(col, row) {
 };
 
 Block.prototype.blink = function() {
-  var anim = this.animations.add('blink', [15, this.frame, 15, this.frame, 15]);
-  anim.play(5, false, true);
+  var anim = this.animations.add('blink', [15, this.frame, 15, this.frame, 15, this.frame, 15]);
+  anim.play(8, false, true);
 };
 
 module.exports = Block;

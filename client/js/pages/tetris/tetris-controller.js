@@ -1,17 +1,12 @@
 'use strict';
 
-module.exports = function ($scope) {
+module.exports = function () {
   var vm = this;
   vm.options = {
-    width: 10,
-    height: 22
+    width: 36,
+    height: 30
   };
-  vm.tileWidth = 20;
-  vm.tileHeight = 20;
-  vm.canvasStyle = {
-    width: (vm.options.width * vm.tileWidth) + 'px',
-    height: (vm.options.height * vm.tileHeight) + 'px'
-  };
+  vm.tileSize = 20;
 
   vm.resetGame = function() {
     vm.game.state.restart();
@@ -24,8 +19,8 @@ module.exports = function ($scope) {
 
   vm.startGame = function() {
     vm.game = new Phaser.Game(
-      1,
-      1,
+      vm.options.width * vm.tileSize,
+      vm.options.height * vm.tileSize,
       Phaser.AUTO,
       'tetris',
       null,

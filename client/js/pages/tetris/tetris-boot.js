@@ -2,7 +2,7 @@ function Boot() {}
 
 Boot.prototype = {
   init: function() {
-    this.game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
+    this.game.scale.scaleMode = Phaser.ScaleManager.NO_SCALE;
   },
 
   create: function() {
