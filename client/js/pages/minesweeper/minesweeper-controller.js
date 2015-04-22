@@ -4,7 +4,7 @@ var MINE_COUNT_STYLE = {
   font: '18px Arial', align: 'center'
 };
 var HEADER_STYLE = {
-  font: '40px Arial', fill: '#000000', align: 'center'
+  font: '28px Arial', fill: '#000000', align: 'center'
 };
 var MINE_COUNT_COLORS = [
   '#0200ae',

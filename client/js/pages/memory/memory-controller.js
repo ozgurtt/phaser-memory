@@ -102,7 +102,7 @@ module.exports = ['ResourceService', function (ResourceService) {
     },
 
     showWin: function() {
-      game.add.text(game.world.centerX - 40, 400, 'You win!', { 'font': '22px Helvetica', fill: '#000' });
+      game.add.text(game.world.centerX - 40, 400, 'YOUR WINNER', { 'font': '22px Helvetica', fill: '#000' });
     }
   };
 
