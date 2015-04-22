@@ -26,11 +26,17 @@ Game.prototype = {
       return [];
     });
 
-    this.game.stage.backgroundColor = '#000000';
+    //this.game.stage.backgroundColor = '#000000';
     this.map = this.game.add.tilemap('map');
     this.map.addTilesetImage('background');
 
-    var layer = this.map.createLayer('Tile Layer 1');
+    var background = this.add.group();
+    var layer = this.map.createLayer('Background');
+    background.add(layer);
+
+    this.foreground = this.add.group();
+    this.foreground.add(this.map.createLayer('Foreground'));
+
     layer.resizeWorld();
 
     var font = this.game.add.retroFont('pressStart', 20, 20, (Phaser.RetroFont.TEXT_SET3));
