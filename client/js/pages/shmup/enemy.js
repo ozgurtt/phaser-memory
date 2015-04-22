@@ -31,7 +31,7 @@ Enemy.prototype.spawn = function(x) {
   this.body.velocity.y = 300;
   this.body.acceleration.y = 100;
 
-  this.game.time.events.add(1000, this.moveLeft, this);
+  this.ai = this.game.time.events.add(1000, this.moveLeft, this);
 };
 
 // TODO remove after upgrading to Phaser 2.3.1
@@ -47,6 +47,7 @@ Enemy.prototype.moveLeft = function() {
 Enemy.prototype.reset = function(x, y, health) {
   Phaser.Sprite.prototype.reset.call(this, x, y, health);
 
+  if (this.ai) this.game.time.events.remove(this.ai);
   this.moveDirection = 0;
 };
 
